@@ -57,7 +57,14 @@ const MetArtExplorer = () => {
           <div
             key={item.objectID}
             onClick={() => handleSelect(item)}
-            style={{ cursor: 'pointer', width: '180px' }}
+            style={{ 
+              cursor: 'pointer', 
+              width: '180px',
+              border: '2px solid #ccc',           // Added border
+              borderRadius: '10px',               // Optional: rounded corners
+              boxShadow: '0 2px 8px #eee',        // Optional: subtle shadow
+              padding: '0.5rem',                  // Optional: spacing inside border
+              background: '#fff'     }}
           >
             <img
               src={item.primaryImageSmall}
