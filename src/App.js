@@ -7,6 +7,8 @@ const MetArtExplorer = () => {
   const [loading, setLoading] = useState(false);
 
   const searchArtworks = async () => {
+
+    // Met API 
     if (!query.trim()) return;
     setLoading(true);
     setResults([]);
