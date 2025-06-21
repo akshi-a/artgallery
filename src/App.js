@@ -23,8 +23,6 @@ const MetArtExplorer = () => {
       );
       const searchData = await searchRes.json();
       const objectIDs = searchData.objectIDs?.slice(0, 30) || [];
-      const validResults = objectIDs.filter(item => item.primaryImageSmall && item.primaryImageSmall.length > 0);
-      
 
       const shuffled = objectIDs.sort(() => 0.5 - Math.random()).slice(0, 12);
 
@@ -32,10 +30,12 @@ const MetArtExplorer = () => {
         fetch(`https://collectionapi.metmuseum.org/public/collection/v1/objects/${id}`).then(res => res.json())
       );
       const detailedResults = await Promise.all(detailPromises);
+      const filteredResults = detailedResults.filter(item => item.primaryImageSmall && item.primaryImageSmall.length > 0);
+
 
       console.log("Query:", query);
       console.log("Results:", detailedResults);   
-      setResults(detailedResults);
+      setResults(filteredResults);
     } catch (err) {
       console.error('Error fetching artworks:', err);
     } finally {
@@ -74,18 +74,32 @@ const MetArtExplorer = () => {
           flexWrap: 'wrap',
           justifyContent: 'center',
           gap: '2rem', }}>
-            {results
-            .filter(item => item.primaryImageSmall && item.primaryImageSmall.length > 0)
-            .map((item) => (
-              <ArtCard
-                key={item.objectID}
-                item={item}
-                onSelect={() => handleSelect(item)}
-                isExpanded={expandedId === item.objectID}
-                onClose={handleClose}
-              />
-            ))}
-
+            {results.map(item => {
+              console.log('Rendering item:', item.objectID, item.title);
+              return (
+                <ArtCard
+                  key={item.objectID}
+                  item={item}
+                  onSelect={() => handleSelect(item)}
+                  isExpanded={expandedId === item.objectID}
+                  onClose={handleClose}
+                />
+              );
+            })}
+      {selected && (
+        <div style={{ marginTop: '2rem' }}>
+          <h2>{selected.title}</h2>
+          <p><strong>Artist:</strong> {selected.artistDisplayName || 'Unknown'}</p>
+          <p><strong>Date:</strong> {selected.objectDate}</p>
+          <p><strong>Medium:</strong> {selected.medium}</p>
+          <p><strong>Dimensions:</strong> {selected.dimensions}</p>
+          <img
+            src={selected.primaryImage}
+            alt={selected.title}
+            style={{ width: '100%', maxWidth: '600px', marginTop: '1rem' }}
+          />
+        </div>
+      )}
   
       
       
