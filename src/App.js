@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
+import ArtCard from './ArtCard';
 
 const MetArtExplorer = () => {
   const [query, setQuery] = useState('');
   const [results, setResults] = useState([]);
   const [selected, setSelected] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [expandedId, setExpandedId] = useState(null);
 
   const searchArtworks = async () => {
 
@@ -13,13 +15,16 @@ const MetArtExplorer = () => {
     setLoading(true);
     setResults([]);
     setSelected(null);
+    setExpandedId(null);
 
     try {
       const searchRes = await fetch(
         `https://collectionapi.metmuseum.org/public/collection/v1/search?hasImages=true&q=${encodeURIComponent(query)}`
       );
       const searchData = await searchRes.json();
-      const objectIDs = searchData.objectIDs?.slice(0, 25) || [];
+      const objectIDs = searchData.objectIDs?.slice(0, 30) || [];
+      const validResults = objectIDs.filter(item => item.primaryImageSmall && item.primaryImageSmall.length > 0);
+      
 
       const shuffled = objectIDs.sort(() => 0.5 - Math.random()).slice(0, 12);
 
@@ -28,7 +33,8 @@ const MetArtExplorer = () => {
       );
       const detailedResults = await Promise.all(detailPromises);
 
-
+      console.log("Query:", query);
+      console.log("Results:", detailedResults);   
       setResults(detailedResults);
     } catch (err) {
       console.error('Error fetching artworks:', err);
@@ -39,6 +45,12 @@ const MetArtExplorer = () => {
 
   const handleSelect = (obj) => {
     setSelected(obj);
+    setExpandedId(obj.objectID)
+  };
+
+  const handleClose = () => {
+    setExpandedId(null);
+    setTimeout(() => setSelected(null), 500); // delay to match reverse animation
   };
 
   return (
@@ -57,46 +69,27 @@ const MetArtExplorer = () => {
 
       {loading && <p>Loading...</p>}
 
-      <div style={{ justifyContent: 'center', display: 'flex', flexWrap: 'wrap', gap: '1rem', marginTop: '2rem' }}>
-        {results.map((item) => (
-          <div
-            key={item.objectID}
-            onClick={() => handleSelect(item)}
-            style={{ 
-              cursor: 'pointer', 
-              width: '180px',
-              border: '2px solid #ccc',           // Added border
-              borderRadius: '10px',               // Optional: rounded corners
-              boxShadow: '0 2px 8px #eee',        // Optional: subtle shadow
-              padding: '0.5rem',                  // Optional: spacing inside border
-              background: '#fff'     }}
-          >
-            <img
-              src={item.primaryImageSmall || 'https://via.placeholder.com/300x400?text=No+Image'}
-              alt={item.title}
-              style={{ width: '100%', borderRadius: '8px' }}
-            />
-            <p><strong>{item.title}</strong></p>
-            <p style={{ fontSize: '0.8rem' }}>{item.artistDisplayName || 'Unknown Artist'}</p>
-          </div>
-        ))}
-      </div>
 
-      {selected && (
-        <div style={{ marginTop: '2rem' }}>
-          <h2>{selected.title}</h2>
-          <p><strong>Artist:</strong> {selected.artistDisplayName || 'Unknown'}</p>
-          <p><strong>Date:</strong> {selected.objectDate}</p>
-          <p><strong>Medium:</strong> {selected.medium}</p>
-          <p><strong>Dimensions:</strong> {selected.dimensions}</p>
-          <img
-            src={selected.primaryImage}
-            alt={selected.title}
-            style={{ width: '100%', maxWidth: '600px', marginTop: '1rem' }}
-          />
-        </div>
-      )}
-    </div>
+      <div style={{ display: 'flex',
+          flexWrap: 'wrap',
+          justifyContent: 'center',
+          gap: '2rem', }}>
+            {results
+            .filter(item => item.primaryImageSmall && item.primaryImageSmall.length > 0)
+            .map((item) => (
+              <ArtCard
+                key={item.objectID}
+                item={item}
+                onSelect={() => handleSelect(item)}
+                isExpanded={expandedId === item.objectID}
+                onClose={handleClose}
+              />
+            ))}
+
+  
+      
+      
+    </div></div>
   );
 };
 
