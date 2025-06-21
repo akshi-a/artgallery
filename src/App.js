@@ -37,7 +37,7 @@ const MetArtExplorer = () => {
   };
 
   return (
-    <div style={{ padding: '2rem', fontFamily: 'sans-serif' }}>
+    <div style={{ textAlign: 'center', padding: '2rem', fontFamily: 'sans-serif' }}>
       <h1>🎨 Met Museum Art Explorer</h1>
       <input
         type="text"
@@ -52,7 +52,7 @@ const MetArtExplorer = () => {
 
       {loading && <p>Loading...</p>}
 
-      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem', marginTop: '2rem' }}>
+      <div style={{ justifyContent: 'center', display: 'flex', flexWrap: 'wrap', gap: '1rem', marginTop: '2rem' }}>
         {results.map((item) => (
           <div
             key={item.objectID}
@@ -67,7 +67,7 @@ const MetArtExplorer = () => {
               background: '#fff'     }}
           >
             <img
-              src={item.primaryImageSmall}
+              src={item.primaryImageSmall || 'https://via.placeholder.com/300x400?text=No+Image'}
               alt={item.title}
               style={{ width: '100%', borderRadius: '8px' }}
             />
