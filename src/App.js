@@ -19,12 +19,15 @@ const MetArtExplorer = () => {
         `https://collectionapi.metmuseum.org/public/collection/v1/search?hasImages=true&q=${encodeURIComponent(query)}`
       );
       const searchData = await searchRes.json();
-      const objectIDs = searchData.objectIDs?.slice(0, 10) || [];
+      const objectIDs = searchData.objectIDs?.slice(0, 25) || [];
 
-      const detailPromises = objectIDs.map(id =>
+      const shuffled = objectIDs.sort(() => 0.5 - Math.random()).slice(0, 12);
+
+      const detailPromises = shuffled.map(id =>
         fetch(`https://collectionapi.metmuseum.org/public/collection/v1/objects/${id}`).then(res => res.json())
       );
       const detailedResults = await Promise.all(detailPromises);
+
 
       setResults(detailedResults);
     } catch (err) {
