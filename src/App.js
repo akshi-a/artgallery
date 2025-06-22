@@ -22,9 +22,11 @@ const MetArtExplorer = () => {
         `https://collectionapi.metmuseum.org/public/collection/v1/search?hasImages=true&q=${encodeURIComponent(query)}`
       );
       const searchData = await searchRes.json();
-      const objectIDs = searchData.objectIDs?.slice(0, 30) || [];
+      const allIDs = searchData.objectIDs || [];
+      const randomStart = Math.floor(Math.random() * (allIDs.length - 100));
+      const slice = allIDs.slice(randomStart, randomStart + 100);
 
-      const shuffled = objectIDs.sort(() => 0.5 - Math.random()).slice(0, 12);
+      const shuffled = slice.sort(() => 0.5 - Math.random()).slice(0, 15);
 
       const detailPromises = shuffled.map(id =>
         fetch(`https://collectionapi.metmuseum.org/public/collection/v1/objects/${id}`).then(res => res.json())
@@ -32,10 +34,11 @@ const MetArtExplorer = () => {
       const detailedResults = await Promise.all(detailPromises);
       const filteredResults = detailedResults.filter(item => item.primaryImageSmall && item.primaryImageSmall.length > 0);
 
+      const random10 = filteredResults.sort(() => 0.5 - Math.random()).slice(0, 10);
 
       console.log("Query:", query);
-      console.log("Results:", detailedResults);   
-      setResults(filteredResults);
+      console.log("Results:", random10);   
+      setResults(random10);
     } catch (err) {
       console.error('Error fetching artworks:', err);
     } finally {
@@ -75,31 +78,18 @@ const MetArtExplorer = () => {
           justifyContent: 'center',
           gap: '2rem', }}>
             {results.map(item => {
-              console.log('Rendering item:', item.objectID, item.title);
-              return (
-                <ArtCard
-                  key={item.objectID}
-                  item={item}
-                  onSelect={() => handleSelect(item)}
-                  isExpanded={expandedId === item.objectID}
-                  onClose={handleClose}
-                />
-              );
-            })}
-      {selected && (
-        <div style={{ marginTop: '2rem' }}>
-          <h2>{selected.title}</h2>
-          <p><strong>Artist:</strong> {selected.artistDisplayName || 'Unknown'}</p>
-          <p><strong>Date:</strong> {selected.objectDate}</p>
-          <p><strong>Medium:</strong> {selected.medium}</p>
-          <p><strong>Dimensions:</strong> {selected.dimensions}</p>
-          <img
-            src={selected.primaryImage}
-            alt={selected.title}
-            style={{ width: '100%', maxWidth: '600px', marginTop: '1rem' }}
+        console.log('Rendering item:', item.objectID, item.title);
+        return (
+          <ArtCard
+            key={item.objectID}
+            item={item}
+            onSelect={() => handleSelect(item)}
+            isExpanded={expandedId === item.objectID}
+            onClose={handleClose}
           />
-        </div>
-      )}
+        );
+      })}
+
   
       
       
