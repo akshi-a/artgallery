@@ -42,3 +42,14 @@
   left: 5vw;
   z-index: 1000;
 }
+
+.art-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+  background-color: antiquewhite;
+}
+
+.art-card:hover {
+  transform: scale(1.25);
+  box-shadow: 0 10px 20px rgb(255, 184, 43);
+}
