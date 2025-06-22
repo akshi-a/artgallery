@@ -71,10 +71,12 @@ const MetArtExplorer = () => {
       {loading && <p>Loading...</p>}
 
 
-      <div style={{ display: 'flex',
+      <div 
+          style={{ display: 'flex',
           flexWrap: 'wrap',
           justifyContent: 'center',
           gap: '2rem', }}>
+            
             {results.map(item => {
         console.log('Rendering item:', item.objectID, item.title);
         return (

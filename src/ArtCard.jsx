@@ -3,12 +3,13 @@ import './ArtCard.css';
 
 const ArtCard = ({ item }) => {
   return (
-    <div className = "art-card" style={{ border: '1px solid black', width: 180, margin: 10, padding: 10 }}>
-      <p>{item.title}</p>
+    <div 
+      className = "art-card" 
+     >   
       <img
+        className="art-image"
         src={item.primaryImageSmall || 'https://via.placeholder.com/180x240?text=No+Image'}
-        alt={item.title}
-        style={{ width: '100%' }}
+        alt={item.title}        
       />
     </div>
     
