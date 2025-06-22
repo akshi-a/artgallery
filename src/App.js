@@ -23,12 +23,10 @@ const MetArtExplorer = () => {
       );
       const searchData = await searchRes.json();
       const allIDs = searchData.objectIDs || [];
-      const randomStart = Math.floor(Math.random() * (allIDs.length - 100));
-      const slice = allIDs.slice(randomStart, randomStart + 100);
+      const randomIDs = allIDs.sort(() => 0.5 - Math.random()).slice(0, 25);
 
-      const shuffled = slice.sort(() => 0.5 - Math.random()).slice(0, 15);
 
-      const detailPromises = shuffled.map(id =>
+      const detailPromises = randomIDs.map(id =>
         fetch(`https://collectionapi.metmuseum.org/public/collection/v1/objects/${id}`).then(res => res.json())
       );
       const detailedResults = await Promise.all(detailPromises);
