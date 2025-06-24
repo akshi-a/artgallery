@@ -4,9 +4,7 @@ import ArtCard from './ArtCard';
 const MetArtExplorer = () => {
   const [query, setQuery] = useState('');
   const [results, setResults] = useState([]);
-  const [selected, setSelected] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [expandedId, setExpandedId] = useState(null);
 
   const searchArtworks = async () => {
 
@@ -14,8 +12,6 @@ const MetArtExplorer = () => {
     if (!query.trim()) return;
     setLoading(true);
     setResults([]);
-    setSelected(null);
-    setExpandedId(null);
 
     try {
       const searchRes = await fetch(
@@ -44,15 +40,6 @@ const MetArtExplorer = () => {
     }
   };
 
-  const handleSelect = (obj) => {
-    setSelected(obj);
-    setExpandedId(obj.objectID)
-  };
-
-  const handleClose = () => {
-    setExpandedId(null);
-    setTimeout(() => setSelected(null), 500); // delay to match reverse animation
-  };
 
   return (
     <div style={{ textAlign: 'center', padding: '2rem', fontFamily: 'sans-serif' }}>
@@ -62,7 +49,7 @@ const MetArtExplorer = () => {
         placeholder="Search for an artist, title, keyword..."
         value={query}
         onChange={(e) => setQuery(e.target.value)}
-        style={{ padding: '0.5rem', width: '300px' }}
+        style={{ padding: '0.5rem', width: '300px', marginBottom: '2rem' }}
       />
       <button onClick={searchArtworks} style={{ marginLeft: '1rem', padding: '0.5rem 1rem' }}>
         Search
@@ -71,29 +58,16 @@ const MetArtExplorer = () => {
       {loading && <p>Loading...</p>}
 
 
-      <div 
-          style={{ display: 'flex',
-          flexWrap: 'wrap',
-          justifyContent: 'center',
-          gap: '2rem', }}>
-            
-            {results.map(item => {
-        console.log('Rendering item:', item.objectID, item.title);
-        return (
-          <ArtCard
-            key={item.objectID}
-            item={item}
-            onSelect={() => handleSelect(item)}
-            isExpanded={expandedId === item.objectID}
-            onClose={handleClose}
-          />
-        );
-      })}
+      <div className="gallery-grid">
 
+        {results.map(item => (
+          <ArtCard key={item.objectID} item={item} />
+        ))}
+      </div>
   
       
       
-    </div></div>
+    </div>
   );
 };
 
