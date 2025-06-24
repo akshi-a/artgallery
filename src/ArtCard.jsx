@@ -5,18 +5,19 @@ const ArtCard = ({ item }) => {
   const [flipped, setFlipped] = useState(false);
 
   return (
-    <div className="flip-card" onClick={() => setFlipped(!flipped)}>
-      <div className={`flip-inner ${flipped ? 'flipped' : ''}`}>
-        {/* Front */}
-        <div className="flip-front">
+    <div className={`flip-card ${flipped ? 'flipped' : ''}`} onClick={() => setFlipped(!flipped)}>
+      <div className="flip-inner">
+        {/* This wrapper is NOT absolute: it sizes the card naturally */}
+        <div className="flip-front-wrapper">
           <img
-            className="art-image"
-            src={item.primaryImageSmall || 'https://via.placeholder.com/200x300?text=No+Image'}
+            loading="lazy"
+            src={item.primaryImageSmall || 'https://via.placeholder.com/150x200?text=No+Image'}
             alt={item.title}
+            className="art-image"
           />
         </div>
 
-        {/* Back */}
+        {/* Back side stays absolute */}
         <div className="flip-back">
           <h3>{item.title}</h3>
           <p><strong>Artist:</strong> {item.artistDisplayName || 'Unknown'}</p>
