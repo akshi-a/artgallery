@@ -31,6 +31,9 @@ const ArtCard = ({ item }) => {
           <p><strong>Date:</strong> {item.objectDate}</p>
           <p><strong>Medium:</strong> {item.medium}</p>
           <p><strong>Dimensions:</strong> {item.dimensions}</p>
+          {item.region && <p><strong>Region:</strong> {item.region}</p>}
+          {item.subregion && <p><strong>Subregion:</strong> {item.subregion}</p>}
+          {item.country && <p><strong>Country:</strong> {item.country}</p>}
         </div>
       </div>
     </div>
