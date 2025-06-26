@@ -23,10 +23,6 @@
 .flip-card.flipped .flip-inner {
   transform: rotateY(180deg);
 }
-.flip-card:focus {
-  outline: 3px solid gold;
-  outline-offset: 4px;
-}
 
 /* The wrapper holds the image normally */
 .flip-front-wrapper {
