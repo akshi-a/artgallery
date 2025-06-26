@@ -49,6 +49,11 @@ const MetArtExplorer = () => {
         placeholder="Search for an artist, title, keyword..."
         value={query}
         onChange={(e) => setQuery(e.target.value)}
+        onKeyDown={(e) => {
+          if (e.key === "Enter") {
+            searchArtworks();
+          }
+        }}
         style={{ padding: '0.5rem', width: '300px', marginBottom: '2rem' }}
       />
       <button onClick={searchArtworks} style={{ marginLeft: '1rem', padding: '0.5rem 1rem' }}>

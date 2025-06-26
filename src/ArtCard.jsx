@@ -5,7 +5,14 @@ const ArtCard = ({ item }) => {
   const [flipped, setFlipped] = useState(false);
 
   return (
-    <div className={`flip-card ${flipped ? 'flipped' : ''}`} onClick={() => setFlipped(!flipped)}>
+    <div className={`flip-card ${flipped ? 'flipped' : ''}`} 
+         onClick={() => setFlipped(!flipped)}
+         onKeyDown={(e) => {
+            if (e.key === "Enter") setFlipped(!flipped);
+        }}
+        tabIndex={0}
+        role="button"
+        aria-pressed={flipped}>
       <div className="flip-inner">
         {/* This wrapper is NOT absolute: it sizes the card naturally */}
         <div className="flip-front-wrapper">
